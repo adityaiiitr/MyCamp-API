@@ -11,3 +11,17 @@ GET/POST/PUT/DELETE
 /api/v1/courses
 /api/v1/auth
 /api/v1/users
+
+// Middlewares 
+const logger = (req, res, next) => {
+    req.hello = 'Hello World' // this variables is accessible throughout the route
+    console.log('Middleware ran')
+    next()
+}
+
+app.use(logger)
+
+//     res.status(200).json({success:true,msg:'Show all Bootcamps', hello: req.hello})
+
+More Advanced logger
+https://github.com/expressjs/morgan
