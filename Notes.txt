@@ -1,0 +1,13 @@
+-> Setting up express
+app.get('/',(req,res)=>{
+    // res.send('<h1>Hello from express</h1>')
+    // res.sendStatus(400)
+    res.status(400).json({success:false})
+})
+
+Route structure
+GET/POST/PUT/DELETE
+/api/v1/bootcamps
+/api/v1/courses
+/api/v1/auth
+/api/v1/users
