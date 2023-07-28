@@ -62,3 +62,5 @@ exports.getBootcamp = async (req,res,next) =>{
         next(err) //custom express error handler
     }
 }
+
+console.log(err.name) in error.js
