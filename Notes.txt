@@ -32,3 +32,17 @@ create a cluster
 Database access - add a new users
 network access - add ip address - allow access from anywhere
 create a mongodb uri
+
+-> Connecting database with mongoose
+const mongoose = require('mongoose')
+
+const connectDB = async () => {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`)
+}
+
+module.exports = connectDB
+
+-> Adding colours to the console
+color.js 
+npm i colors
