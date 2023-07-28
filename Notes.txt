@@ -46,3 +46,19 @@ module.exports = connectDB
 -> Adding colours to the console
 color.js 
 npm i colors
+
+-> Error Handlers Express
+https://expressjs.com/en/guide/error-handling.html
+exports.getBootcamp = async (req,res,next) =>{
+    try{
+        const bootcamp = await Bootcamp.findById(req.params.id);
+        if(!bootcamp){
+            //for correctly formatted id not in db
+            return res.status(400).json({success:false})
+        }
+        res.status(200).json({success:true,data: bootcamp})
+    } catch(err){
+        // res.status(400).json({success:false})
+        next(err) //custom express error handler
+    }
+}
