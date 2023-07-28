@@ -21,7 +21,14 @@ const logger = (req, res, next) => {
 
 app.use(logger)
 
-//     res.status(200).json({success:true,msg:'Show all Bootcamps', hello: req.hello})
+//  res.status(200).json({success:true,msg:'Show all Bootcamps', hello: req.hello})
 
 More Advanced logger
 https://github.com/expressjs/morgan
+
+-> Adding MongoDB
+Login on MongoDB
+create a cluster
+Database access - add a new users
+network access - add ip address - allow access from anywhere
+create a mongodb uri
