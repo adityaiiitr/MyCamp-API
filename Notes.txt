@@ -5,7 +5,7 @@ app.get('/',(req,res)=>{
     res.status(400).json({success:false})
 })
 
-Route structure
+Route structurevv
 GET/POST/PUT/DELETE
 /api/v1/bootcamps
 /api/v1/courses
@@ -64,3 +64,11 @@ exports.getBootcamp = async (req,res,next) =>{
 }
 
 console.log(err.name) in error.js
+
+
+-> Async/Await Middleware
+DRY - Dont repeat yourself
+https://www.acuriousanimal.com/blog/20180315/express-async-middleware
+Create a middleware async.js
+now wrap the function in asyncHadler()
+
