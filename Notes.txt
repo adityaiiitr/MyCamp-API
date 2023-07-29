@@ -82,3 +82,10 @@ https://mongoosejs.com/docs/middleware.html
 BootcampSchema.pre('save', your function here
   next();
 );
+
+1. slugify
+npm install slugify
+2. Geocoder
+https://github.com/nchaulet/node-geocoder
+npm install node-geocoder
+mapquest api
