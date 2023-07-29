@@ -111,7 +111,7 @@ const BootcampSchema = new mongoose.Schema(
   }
 );
 
-// Create bootcamp slug from the name
+// Create bootcamp slug from the name [pre] means before saving
 BootcampSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();

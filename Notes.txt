@@ -72,3 +72,13 @@ https://www.acuriousanimal.com/blog/20180315/express-async-middleware
 Create a middleware async.js
 now wrap the function in asyncHadler()
 
+-> Mongoose Middleware
+changing the data before its added to the database 
+adding another field, etc
+validationg the data 
+https://mongoosejs.com/docs/middleware.html
+
+
+BootcampSchema.pre('save', your function here
+  next();
+);
