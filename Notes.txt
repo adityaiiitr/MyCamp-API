@@ -89,3 +89,10 @@ npm install slugify
 https://github.com/nchaulet/node-geocoder
 npm install node-geocoder
 mapquest api
+
+Schema referrring to other schema
+  bootcamp: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Bootcamp',
+    required: true
+  },
