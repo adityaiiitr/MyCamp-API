@@ -110,8 +110,7 @@ router.use('/:bootcampId/courses',courseRouter)
 
 Populate, Virtuals and Cascade
 
-        query = Course.find().populate({
-            path: 'bootcamp',
-            select: 'name description'
-
-        });
+    query = Course.find().populate({
+        path: 'bootcamp',
+        select: 'name description'
+    });
