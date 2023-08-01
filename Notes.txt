@@ -96,3 +96,22 @@ Schema referrring to other schema
     ref: 'Bootcamp',
     required: true
   },
+
+
+ReRouting in Mongoose
+// Include other resource router
+const courseRouter = require('./courses')
+
+const router = express.Router()
+
+// Reroute into other resource routers
+router.use('/:bootcampId/courses',courseRouter)
+
+
+Populate, Virtuals and Cascade
+
+        query = Course.find().populate({
+            path: 'bootcamp',
+            select: 'name description'
+
+        });
