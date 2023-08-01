@@ -15,7 +15,6 @@ exports.getCourses = asyncHandler(async(req,res,next)=>{
         query = Course.find().populate({
             path: 'bootcamp',
             select: 'name description'
-
         });
     }
 
