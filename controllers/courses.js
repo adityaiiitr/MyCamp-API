@@ -96,14 +96,33 @@ exports.updateCourse = asyncHandler(async(req,res,next)=>{
 // @route PUT /api/v1/courses/:id
 // @access Private
 exports.deleteCourse = asyncHandler(async(req,res,next)=>{
-    const course = await Course.findById(req.params.id)
-
-    if(!course) {
-        return next(new ErrorResponse(`No Course with the id of ${req.params.id}`),404)
+    const course = await Course.findOne({ _id: req.params.id }).populate('bootcamp');
+    const query = await Course.find({bootcamp: course.bootcamp._id});
+    console.log(query.length)
+    console.log(course.bootcamp._id)
+    // const course = await Course.findOneAndDelete({ _id: req.params.id })
+    if (!course) {
+        return next(new ErrorResponse(`No Course with the id of ${req.params.id}`), 404);
+    }
+    
+    await course.deleteOne(); // Use the deleteOne() method
+    let averageCost;
+    try {
+        const bootcamp = await Bootcamp.findById(course.bootcamp._id);
+        averageCost = query.length!=1 ?  (bootcamp.averageCost*query.length-course.tuition)/(query.length-1) : 0
+        console.log(averageCost)
+    } catch (err) {
+    console.log(err);
     }
 
-    await Course.deleteOne(course)
-    
+    try {
+        await Bootcamp.findByIdAndUpdate(course.bootcamp._id, {
+            averageCost,
+        });
+    } catch (err) {
+    console.log(err);
+    }
+        
     res.status(200).json({
         success: true,
         data:{}

@@ -32,7 +32,7 @@ const CourseSchema = new mongoose.Schema({
     default: Date.now
   },
   bootcamp: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Bootcamp',
     required: true
   }
@@ -44,42 +44,118 @@ const CourseSchema = new mongoose.Schema({
   // }
 });
 
-// // Static method to get avg of course tuitions
-// CourseSchema.statics.getAverageCost = async function(bootcampId) {
-//   const obj = await this.aggregate([
-//     {
-//       $match: { bootcamp: bootcampId }
-//     },
-//     {
-//       $group: {
-//         _id: '$bootcamp',
-//         averageCost: { $avg: '$tuition' }
-//       }
-//     }
-//   ]);
 
-//   const averageCost = obj[0]
-//     ? Math.ceil(obj[0].averageCost / 10) * 10
-//     : undefined;
-//   try {
-//     await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
-//       averageCost,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+// Course Aggregation is not working so middleware is implemented in the controller itself
 
-// // Call getAverageCost after save
-// CourseSchema.post('save', async function() {
-//   await this.constructor.getAverageCost(this.bootcamp);
-// });
+// Static method to get avg of course tuitions
+CourseSchema.statics.getAverageCost = async function(bootcampId) {
+  const obj = await this.aggregate([
+    {
+      $match: { bootcamp: bootcampId }
+    },
+    {
+      $group: {
+        _id: '$bootcamp',
+        averageCost: { $avg: '$tuition' }
+      }
+    }
+  ]);
+  console.log(obj)
 
-// // Call getAverageCost after remove
-// CourseSchema.post('remove', async function () {
-//   await this.constructor.getAverageCost(this.bootcamp);
-// });
+  const averageCost = obj[0]
+    ? Math.ceil(obj[0].averageCost / 10) * 10
+    : undefined;
+  // try {
+  //   await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
+  //     averageCost,
+  //   });
+  try {
+    const Bootcamp = mongoose.model('Bootcamp');
+    await Bootcamp.findByIdAndUpdate(bootcampId, {
+        averageCost,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
+// Call getAverageCost after save
+CourseSchema.post('save', async function() {
+  console.log(`Adding AverageCost Before Saving`)
+  // await this.constructor.getAverageCost(this.bootcamp);
+  const bootcampId = this.bootcamp
+  console.log(typeof(bootcampId))
+
+  const obj = await this.model('Course').aggregate([
+    {
+      $match: { bootcamp: bootcampId }
+    },
+    {
+      $group: {
+        _id: '$bootcamp',
+        averageCost: { $avg: '$tuition' }
+      }
+    }
+  ]);
+  console.log(obj)
+
+
+  const averageCost = obj[0]
+    ? Math.ceil(obj[0].averageCost / 10) * 10
+    : undefined;
+  // try {
+  //   await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
+  //     averageCost,
+  //   });
+  try {
+    const Bootcamp = mongoose.model('Bootcamp');
+    await Bootcamp.findByIdAndUpdate(bootcampId, {
+        averageCost,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Call getAverageCost after remove
+CourseSchema.post('findOneAndDelete', async function () {
+  console.log(`Adding AverageCost After Deletion`)
+  // await this.model('Course').getAverageCost(this.bootcamp); // this construvtor is not a funtion aisa kuch error aa rha hai.... theek kerdo koi....
+  // const bootcampId = this.bootcamp
+  const bootcampId = this.getFilter()["_id"]
+
+  console.log(`Bootcamp : ${bootcampId}`)
+  const obj = await this.model('Course').aggregate([
+    {
+      $match: { bootcamp: new mongoose.Types.ObjectId(bootcampId) }
+    },
+    {
+      $group: {
+        _id: '$bootcamp',
+        averageCost: { $avg: '$tuition' }
+      }
+    }
+  ]);
+  console.log(obj)
+
+
+  const averageCost = obj[0]
+    ? Math.ceil(obj[0].averageCost / 10) * 10
+    : undefined;
+  // try {
+  //   await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
+  //     averageCost,
+  //   });
+  try {
+    const Bootcamp = mongoose.model('Bootcamp');
+    await Bootcamp.findByIdAndUpdate(bootcampId, {
+        averageCost,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+ 
 // // Call getAverageCost after tuition update
 // CourseSchema.post("findOneAndUpdate", async function (doc) {
 //   if (this.tuition != doc.tuition) {
