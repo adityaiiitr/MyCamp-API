@@ -237,3 +237,18 @@ CourseSchema.post('findOneAndDelete', async function () {
 //   }
 // });
 
+
+-> FILE UPLOAD 
+npm i express-fileupload
+
+const fileupload = require('express-fileupload')
+// File upload
+app.use(fileupload())
+
+file.name = `photo_${bootcamp,_id}` // this doesnot gives the file extension
+with the extension use the path nodejs lib
+file.name = `photo_${bootcamp,_id}${path.parse(file.name).ext}`
+
+
+
+
