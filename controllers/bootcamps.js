@@ -9,75 +9,76 @@ const path = require('path')
 // @route GET /api/v1/bootcamps
 // @access Public
 exports.getBootcamps = asyncHandler(async (req,res,next) =>{
-        console.log(req.query)
-        let query;
+        // console.log(req.query)
+        // let query;
 
-        // Copy the req.query
-        const reqQuery = {...req.query}
+        // // Copy the req.query
+        // const reqQuery = {...req.query}
 
-        // Fields to exclude
-        const removeFields = ['select','sort','page','limit'];
+        // // Fields to exclude
+        // const removeFields = ['select','sort','page','limit'];
 
-        // loop over removeFields and delete them from reqQuery
-        removeFields.forEach(param => delete reqQuery[param])
+        // // loop over removeFields and delete them from reqQuery
+        // removeFields.forEach(param => delete reqQuery[param])
 
-        console.log(reqQuery)
+        // console.log(reqQuery)
 
-        // Create a query string
-        let queryStr = JSON.stringify(reqQuery)
+        // // Create a query string
+        // let queryStr = JSON.stringify(reqQuery)
 
-        // create a operator ($gt, $gte,etc)
-        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g,match => `$${match}`)
+        // // create a operator ($gt, $gte,etc)
+        // queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g,match => `$${match}`)
 
-        // Finding resources
-        query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
+        // // Finding resources
+        // query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
 
-        // SELECT Fields 
-        if(req.query.select) {
-            // const fields = req.query.select.split(',').join(' ')
-            const fields = req.query.select.replace(',',' ')
-            console.log(fields)
-            query = query.select(fields)
-        }
+        // // SELECT Fields 
+        // if(req.query.select) {
+        //     // const fields = req.query.select.split(',').join(' ')
+        //     const fields = req.query.select.replace(',',' ')
+        //     console.log(fields)
+        //     query = query.select(fields)
+        // }
 
-        // Sort
-        if(req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ')
-            query = query.sort(sortBy)
-        } else {
-            query = query.sort('-createdAt')
-        }
+        // // Sort
+        // if(req.query.sort) {
+        //     const sortBy = req.query.sort.split(',').join(' ')
+        //     query = query.sort(sortBy)
+        // } else {
+        //     query = query.sort('-createdAt')
+        // }
 
-        // Pagination
-        const page = parseInt(req.query.page, 10) || 1
-        const limit = parseInt(req.query.limit,10) || 25
+        // // Pagination
+        // const page = parseInt(req.query.page, 10) || 1
+        // const limit = parseInt(req.query.limit,10) || 25
 
-        const startIndex = (page -1) * limit
-        const endIndex = page * limit
-        const total = await Bootcamp.countDocuments()
-        query = query.skip(startIndex).limit(limit)
+        // const startIndex = (page -1) * limit
+        // const endIndex = page * limit
+        // const total = await Bootcamp.countDocuments()
+        // query = query.skip(startIndex).limit(limit)
         
-        // Executing Query
-        const bootcamps = await query
+        // // Executing Query
+        // const bootcamps = await query
 
 
-        // Pagination Result
-        const pagination = {}
-        if(endIndex < total) {
-            pagination.next = {
-                page:page+1,
-                limit
-            }
-        }
-        if(startIndex > 0) {
-            pagination.next = {
-                page:page-1,
-                limit
-            }
-        }
+        // // Pagination Result
+        // const pagination = {}
+        // if(endIndex < total) {
+        //     pagination.next = {
+        //         page:page+1,
+        //         limit
+        //     }
+        // }
+        // if(startIndex > 0) {
+        //     pagination.next = {
+        //         page:page-1,
+        //         limit
+        //     }
+        // }
+        // ABOVE CODE MOVED TO MIDDLEWARE ADVANCED RESULTS
 
-        res.status(200).json({success:true,count:bootcamps.length,pagination,  data: bootcamps})
-
+        // res.status(200).json({success:true,count:bootcamps.length,pagination,  data: bootcamps})
+        res.status(200).json(res.advancedResults)
 })
 
 
