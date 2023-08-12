@@ -40,7 +40,6 @@ const importData = async () => {
     // await User.create(users);
     // await Review.create(reviews);
     console.log('Data Imported...'.green.inverse);
-    process.exit();
   } catch (err) {
     console.error(err);
   }
@@ -54,7 +53,7 @@ const deleteData = async () => {
     // await User.deleteMany();
     // await Review.deleteMany();
     console.log('Data Destroyed...'.red.inverse);
-    process.exit();
+    
   } catch (err) {
     console.error(err);
   }
@@ -62,10 +61,13 @@ const deleteData = async () => {
 
 if (process.argv[2] === '-i') {
   importData();
+  process.exit();
 } else if (process.argv[2] === '-d') {
   deleteData();
+  process.exit();
 } else if(process.argv[2] === '-r') {
   // refresh data
   deleteData();
   importData();
+  process.exit();
 }
