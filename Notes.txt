@@ -253,3 +253,8 @@ file.name = `photo_${bootcamp,_id}${path.parse(file.name).ext}`
 
 
 -> PIECE OF CODE TO MIDDLEWARE ADDED IN ROUTES OF EACH MODULE
+
+-> Authentication Implementation 
+npm i jsonwebtoken bcryptjs
+
+Create a user model
