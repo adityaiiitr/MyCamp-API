@@ -258,3 +258,5 @@ file.name = `photo_${bootcamp,_id}${path.parse(file.name).ext}`
 npm i jsonwebtoken bcryptjs
 
 Create a user model
+Create Bcrypt password encrypting
+create a jsonwebtoken - https://github.com/auth0/node-jsonwebtoken
