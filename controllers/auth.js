@@ -4,6 +4,9 @@ const asyncHandler = require('../middleware/async')
 const sendEmail = require('../utils/sendEmail')
 const { application } = require('express')
 
+const crypto = require('crypto')
+
+
 // @desc Register User
 // @route POST /api/v1/auth/register
 // @access Public
@@ -79,7 +82,7 @@ exports.forgotPassword = asyncHandler( async (req,res,next) => {
     await user.save({validateBeforeSave:false})
 
     // create reset url
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/resetpassword/${resetToken}`
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/resetpassword/${resetToken}`
 
     const message = `You are receiving this email because you (or someone else) has requsted the reset of a password. Please make a PUT request to:\n\n ${resetUrl}`
 
@@ -105,6 +108,36 @@ exports.forgotPassword = asyncHandler( async (req,res,next) => {
     }
 
     
+})
+
+
+// @desc Reset Password
+// @route PUT /api/v1/auth/resetpassword/:resettoken
+// @access Public
+exports.resetPassword = asyncHandler( async (req,res,next) => {
+    // get hashed password
+    const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(req.params.resettoken)
+        .digest('hex')
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire:{$gt: Date.now()}
+    })
+
+    if(!user) {
+        return next(new ErrorResponse(`Invalid Token.`,400))
+    }
+
+    // set new password
+    user.password = req.body.password
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save()
+
+  // return token
+  sendTokenResponse(user, 200, res);
 })
 
 // Get token from model, create cookie and send response
