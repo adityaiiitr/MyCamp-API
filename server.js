@@ -5,6 +5,8 @@ const logger = require('./middleware/logger')
 const morgan = require('morgan')
 const colors = require('colors')
 
+const mongoSanitize = require('express-mongo-sanitize');
+
 const connectDB = require('./config/db')
 
 const errorHandler = require('./middleware/error')
@@ -36,6 +38,13 @@ if(process.env.NODE_ENV === 'development'){
 
 // File upload
 app.use(fileupload())
+
+// By default, $ and . characters are removed completely from user-supplied input in the following places: to replace these prohibited characters with _, use:
+app.use(
+    mongoSanitize({
+      replaceWith: '_',
+    }),
+  );
 
 // Set static folder
 const path = require('path')
