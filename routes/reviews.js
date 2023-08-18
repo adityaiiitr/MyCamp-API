@@ -1,8 +1,8 @@
 const express = require('express');
 const {
   getReviews,
-  getReview
-//   addReview,
+  getReview,
+  addReview
 //   updateReview,
 //   deleteReview
 } = require('../controllers/reviews');
@@ -23,7 +23,7 @@ router
     }),
     getReviews
   )
-//   .post(protect, authorize('user', 'admin'), addReview);
+  .post(protect, authorize('user', 'admin'), addReview);
 
 router
   .route('/:id')

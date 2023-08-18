@@ -33,8 +33,8 @@ const ReviewSchema = new mongoose.Schema({
   }
 });
 
-// // Prevent user from submitting more than one review per bootcamp
-// ReviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });
+// Prevent user from submitting more than one review per bootcamp
+ReviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });
 
 // // Static method to get avg rating and save
 // ReviewSchema.statics.getAverageRating = async function(bootcampId) {
