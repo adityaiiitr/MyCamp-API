@@ -1,6 +1,7 @@
 const User = require('../models/Users')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
+const bcrypt = require('bcryptjs')
 
 
 // @desc Get all users
@@ -37,6 +38,12 @@ exports.createUser = asyncHandler( async (req,res,next) => {
 // @route PUT /api/v1/auth/users/:id
 // @access Private/Admin
 exports.updateUser = asyncHandler( async (req,res,next) => {
+
+    if(req.body.password) {
+        console.log("PASSWORD UPDATE")
+        const salt = await bcrypt.genSalt(10);
+        req.body.password = await bcrypt.hash(req.body.password, salt)
+    }
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new:true,
         runValidators:true
