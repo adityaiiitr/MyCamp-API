@@ -6,6 +6,11 @@ const morgan = require('morgan')
 const colors = require('colors')
 
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 
 const connectDB = require('./config/db')
 
@@ -39,12 +44,33 @@ if(process.env.NODE_ENV === 'development'){
 // File upload
 app.use(fileupload())
 
+// SECURITY MEASURES ----------> 
+
 // By default, $ and . characters are removed completely from user-supplied input in the following places: to replace these prohibited characters with _, use:
 app.use(
     mongoSanitize({
       replaceWith: '_',
     }),
   );
+
+// Set Security Headers
+app.use(helmet())
+
+// Prevent XSS Attacks
+app.use(xss())
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: 10*60*1000, // 10 mIns
+    max:100
+})
+app.use(limiter)
+
+// Prevent http param pollution
+app.use(hpp())
+
+// enable cors
+app.use(cors())
 
 // Set static folder
 const path = require('path')
