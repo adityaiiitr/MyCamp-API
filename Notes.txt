@@ -268,3 +268,6 @@ NO SQL INJECTION $ in query matches the email or password field - express-mongo-
 XSS Protection Security Headers - helmet
 XSS Clean - prvents any scripts in user inputs
 Rate Limits HPP CORS - npm i express-rate-limit hpp
+
+-> CREATES DOCUMENTATION Docgen
+It will be on index page
