@@ -270,4 +270,4 @@ XSS Clean - prvents any scripts in user inputs
 Rate Limits HPP CORS - npm i express-rate-limit hpp
 
 -> CREATES DOCUMENTATION Docgen
-It will be on index page
+It will be on index
